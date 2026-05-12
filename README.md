@@ -1,6 +1,6 @@
 # CS 171 Final Project — Fake News Detection
 
-**Team:** Madiha Fatima, Shivangi Dua, Matthew Wong
+**Team:** Madiha Fatima, Shivangi Dua, Matthew Wong  
 **Course:** CS 171-01, Spring 2026
 
 ## What we built
@@ -12,12 +12,12 @@ which has around 72k articles pulled from four different sources.
 
 | What | Who |
 |---|---|
-| Dataset exploration and cleaning | Madiha |
-| Preprocessing pipeline, tokenization, GloVe setup | Shivangi |
-| BiLSTM model and training | Shivangi |
-| DistilBERT fine-tuning | Matthew |
-| Evaluation, plots, confusion matrices | Madiha |
-| Report writing and writeup | Matthew |
+| Data preprocessing and cleaning pipeline | Shivangi |
+| BiLSTM model architecture and training | Shivangi |
+| DistilBERT fine-tuning with HuggingFace | Madiha |
+| Model testing and evaluation runs | Matthew |
+| Results analysis, plots, confusion matrices | Shivangi |
+| Report writing | All members |
 
 ## Results
 
