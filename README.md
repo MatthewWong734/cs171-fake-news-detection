@@ -1,34 +1,73 @@
-# CS 171 Final Project — Fake News Detection
+# Fake News Detection — BiLSTM vs DistilBERT
+**CS171 Project | WELFake Dataset**
 
-**Team:** Madiha Fatima, Shivangi Dua, Matthew Wong  
-**Course:** CS 171-01, Spring 2026
+## Project Overview
+Binary classification of fake vs. real news articles using two architectures:
+- **BiLSTM** with GloVe embeddings (traditional deep learning)
+- **DistilBERT** fine-tuned for sequence classification (transformer-based)
 
-## What we built
-We trained two models to classify news articles as real or fake — a BiLSTM 
-we built from scratch and a fine-tuned DistilBERT. We used the WELFake dataset 
-which has around 72k articles pulled from four different sources.
+## Results Summary
 
-## How we split the work
+| Metric     | BiLSTM  | DistilBERT | Delta  |
+|------------|---------|------------|--------|
+| Accuracy   | 96.27%  | 99.07%     | +2.80% |
+| Precision  | 94.95%  | 98.36%     | +3.41% |
+| Recall     | 97.73%  | 99.80%     | +2.07% |
+| F1-Score   | 96.32%  | 99.07%     | +2.75% |
+| ROC-AUC    | 99.47%  | 99.97%     | +0.50% |
 
-| What | Who |
-|---|---|
-| Data preprocessing and cleaning pipeline | Shivangi |
-| BiLSTM model architecture and training | Shivangi |
-| DistilBERT fine-tuning with HuggingFace | Madiha |
-| Model testing and evaluation runs | Matthew |
-| Results analysis, plots, confusion matrices | Shivangi |
-| Report writing | All members |
+## File Structure
 
-## Results
+```
+├── 01_data_preprocessing.py   # EDA, cleaning, tokenization, GloVe embeddings, train/val/test split
+├── 02_model_bilstm.py         # BiLSTM model architecture + training
+├── 03_model_distilbert.py     # DistilBERT fine-tuning
+├── 04_evaluation.py           # Test set evaluation for both models
+├── 05_results_analysis.py     # Side-by-side comparison plots and error analysis
+└── README.md
+```
 
-| Model | Accuracy | F1 | ROC-AUC |
-|---|---|---|---|
-| BiLSTM | 96.27% | 96.26% | 99.21% |
-| DistilBERT | 98.13% | 98.12% | 99.74% |
+## How to Run (Google Colab)
 
-DistilBERT did better pretty much across the board, which makes sense since 
-it came in already knowing language from pretraining. The BiLSTM had to learn 
-everything from the training data with only GloVe embeddings as a starting point.
+**Prerequisites:** Upload `WELFake_Dataset.csv` to your Colab environment.
 
-## Stack
-Python, Pandas, NumPy, Sklearn, TensorFlow/Keras, PyTorch, HuggingFace Transformers
+Run files in order:
+```
+01_data_preprocessing.py   →  generates X_train/val/test splits, embedding_matrix, tokenizer
+02_model_bilstm.py         →  trains BiLSTM, saves bilstm_best.keras
+03_model_distilbert.py     →  fine-tunes DistilBERT, saves distilbert_best/  (requires GPU)
+04_evaluation.py           →  evaluates both models on test set, saves metrics
+05_results_analysis.py     →  generates all comparison plots
+```
+
+## Dataset
+**WELFake** — 72,134 news articles (Fake + Real), merged from four public datasets.
+- Labels: `0 = Fake`, `1 = Real`
+- We use a balanced 20,000-article stratified subset (10k fake + 10k real)
+- Split: 70% train / 15% val / 15% test
+
+## Model Details
+
+### BiLSTM
+- GloVe 6B 100d embeddings (frozen)
+- Bidirectional LSTM (128 units per direction)
+- Dropout: 0.4 | Spatial Dropout: 0.2
+- Optimizer: Adam (lr=1e-3) | Batch size: 64
+
+### DistilBERT
+- `distilbert-base-uncased` fine-tuned for binary classification
+- Max sequence length: 256 tokens
+- Optimizer: AdamW (lr=2e-5, weight_decay=0.01)
+- Linear warmup scheduler (10% warmup) | 4 epochs | Batch size: 16
+
+## Dependencies
+```
+tensorflow>=2.0
+torch
+transformers
+scikit-learn
+pandas
+numpy
+matplotlib
+seaborn
+```
